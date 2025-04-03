@@ -84,26 +84,6 @@ router.delete('/:id', async function(req, res, next) {
     next(error)
   }
 });
-router.get('/:categorySlug/:productSlug', async function (req, res, next) {
-  try {
-    const { categorySlug, productSlug } = req.params;
-
-    const category = await categoryModel.findOne({ slug: categorySlug });
-    if (!category) return CreateErrorRes(res, "Category not found", 404);
-
-    const product = await productModel.findOne({
-      slug: productSlug,
-      category: category._id,
-      isDeleted: false
-    }).populate("category");
-
-    if (!product) return CreateErrorRes(res, "Product not found", 404);
-
-    CreateSuccessRes(res, product, 200);
-  } catch (err) {
-    next(err);
-  }
-});
 
 
 module.exports = router;
