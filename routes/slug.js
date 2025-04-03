@@ -28,7 +28,8 @@ router.get('/:categorySlug/:productSlug?', async (req, res, next) => {
     const products = await productModel.find({
       category: category._id,
       isDeleted: false
-    }).populate("category");
+    }).select('name _id urlImg price');
+
 
     return CreateSuccessRes(res, products, 200);
   } catch (error) {
