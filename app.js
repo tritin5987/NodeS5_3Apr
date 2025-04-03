@@ -35,28 +35,8 @@ app.use('/auth', require('./routes/auth'));
 app.use('/products', require('./routes/products'));
 app.use('/categories', require('./routes/categories'));
 app.use('/menu', require('./routes/menu'));
+app.use('/', require('./routes/slug'));
 
-// Route bắt slug: /:categorySlug/:productSlug
-app.get('/:categorySlug/:productSlug', async (req, res, next) => {
-  try {
-    const { categorySlug, productSlug } = req.params;
-
-    const category = await categoryModel.findOne({ slug: categorySlug });
-    if (!category) return CreateErrorRes(res, "Category not found", 404);
-
-    const product = await productModel.findOne({
-      slug: productSlug,
-      category: category._id,
-      isDeleted: false
-    }).populate("category");
-
-    if (!product) return CreateErrorRes(res, "Product not found", 404);
-
-    return CreateSuccessRes(res, product, 200);
-  } catch (error) {
-    next(error);
-  }
-});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
